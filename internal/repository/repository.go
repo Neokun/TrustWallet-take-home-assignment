@@ -6,7 +6,6 @@ import (
 	"github.com/TrustWallet/tx-parser/internal/types"
 )
 
-//go:generate mockery --name Repository --output ../mocks
 type Repository interface {
 	// GetCurrentBlock return last parsed block number
 	GetCurrentBlock(ctx context.Context) (uint64, error)
@@ -20,6 +19,6 @@ type Repository interface {
 	// AddAddress add an address to list of subscription
 	AddAddress(ctx context.Context, address string) error
 
-	// SaveTransactions save the list of transactions
-	SaveTransactions(ctx context.Context, blockNumber uint64, txns []*types.Transaction) error
+	// SaveTransactions save the list of transactions with block number
+	SaveTransactions(ctx context.Context, blockNumber uint64, txns []types.Transaction) error
 }

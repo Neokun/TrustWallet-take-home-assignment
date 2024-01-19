@@ -4,7 +4,7 @@ import (
 	"github.com/TrustWallet/tx-parser/internal/utils"
 )
 
-// Block contains information of block.
+// Block contains information of block, an add more fields if needed
 type Block struct {
 	Number       utils.HexUint64 `json:"number"`
 	Hash         string          `json:"hash"`

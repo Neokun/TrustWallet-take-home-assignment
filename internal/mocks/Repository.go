@@ -106,11 +106,11 @@ func (_m *Repository) GetTransactions(ctx context.Context, address string) ([]ty
 }
 
 // SaveTransactions provides a mock function with given fields: ctx, blockNumber, txns
-func (_m *Repository) SaveTransactions(ctx context.Context, blockNumber uint64, txns []*types.Transaction) error {
+func (_m *Repository) SaveTransactions(ctx context.Context, blockNumber uint64, txns []types.Transaction) error {
 	ret := _m.Called(ctx, blockNumber, txns)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, uint64, []*types.Transaction) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, uint64, []types.Transaction) error); ok {
 		r0 = rf(ctx, blockNumber, txns)
 	} else {
 		r0 = ret.Error(0)

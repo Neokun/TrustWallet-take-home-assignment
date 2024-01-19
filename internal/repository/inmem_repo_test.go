@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestInMemRepo_GetAddAddress(t *testing.T) {
+func TestInMemRepo_GetAndAddAddress(t *testing.T) {
 	repo := NewInMemRepo()
 	addresses, err := repo.GetAddresses(context.TODO())
 	assert.NoError(t, err)
@@ -40,7 +40,7 @@ func TestInMemRepo_GetCurrentBlock(t *testing.T) {
 	assert.Equal(t, uint64(13), blockNum)
 }
 
-func TestInMemRepo_SaveGetTransactions(t *testing.T) {
+func TestInMemRepo_SaveAndGetTransactions(t *testing.T) {
 	repo := NewInMemRepo()
 	err := repo.AddAddress(context.TODO(), "test1")
 	assert.NoError(t, err)
@@ -56,31 +56,36 @@ func TestInMemRepo_SaveGetTransactions(t *testing.T) {
 	assert.ErrorContains(t, err, "address not found")
 
 	blockNumber := uint64(14)
-	fakeTxns := []*types.Transaction{
+	fakeTxns := []types.Transaction{
 		{
 			BlockNumber: utils.HexUint64(blockNumber),
 			From:        "Test2",
 			To:          "tesT1",
+			Hash:        "hash1",
 		},
 		{
 			BlockNumber: utils.HexUint64(blockNumber),
-			From:        "Test2",
+			From:        "TesT2",
 			To:          "tesT2",
+			Hash:        "hash2",
 		},
 		{
 			BlockNumber: utils.HexUint64(blockNumber),
 			From:        "Test1",
 			To:          "tesT2",
+			Hash:        "hash3",
 		},
 		{
 			BlockNumber: utils.HexUint64(blockNumber),
-			From:        "Test1",
+			From:        "TEst1",
 			To:          "tesT3",
+			Hash:        "hash4",
 		},
 		{
 			BlockNumber: utils.HexUint64(blockNumber),
 			From:        "Test3",
 			To:          "tesT1",
+			Hash:        "hash5",
 		},
 	}
 	err = repo.SaveTransactions(context.TODO(), blockNumber, fakeTxns)
@@ -89,6 +94,9 @@ func TestInMemRepo_SaveGetTransactions(t *testing.T) {
 	txns, err = repo.GetTransactions(context.TODO(), "test2")
 	assert.NoError(t, err)
 	assert.Len(t, txns, 3)
+	assert.Equal(t, "hash1", txns[0].Hash)
+	assert.Equal(t, "hash2", txns[1].Hash)
+	assert.Equal(t, "hash3", txns[2].Hash)
 
 	txns, err = repo.GetTransactions(context.TODO(), "test1")
 	assert.NoError(t, err)

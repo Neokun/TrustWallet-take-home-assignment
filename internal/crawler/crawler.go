@@ -67,7 +67,7 @@ func (c *ethereumCrawler) getLatestBlock(ctx context.Context) (*types.Block, err
 	return block, nil
 }
 
-func (c *ethereumCrawler) extractTransactions(ctx context.Context, block *types.Block) ([]*types.Transaction, error) {
+func (c *ethereumCrawler) extractTransactions(ctx context.Context, block *types.Block) ([]types.Transaction, error) {
 	addresses, err := c.repo.GetAddresses(ctx)
 	if err != nil {
 		return nil, err
@@ -77,19 +77,19 @@ func (c *ethereumCrawler) extractTransactions(ctx context.Context, block *types.
 		addressDict[strings.ToLower(address)] = struct{}{}
 	}
 
-	var txns []*types.Transaction
+	var txns []types.Transaction
 	for _, txn := range block.Transactions {
 		if _, ok := addressDict[strings.ToLower(txn.From)]; ok {
-			txns = append(txns, &txn)
+			txns = append(txns, txn)
 		} else if _, ok = addressDict[strings.ToLower(txn.To)]; ok {
-			txns = append(txns, &txn)
+			txns = append(txns, txn)
 		}
 	}
 
 	return txns, nil
 }
 
-func (c *ethereumCrawler) saveData(ctx context.Context, blockNumber uint64, txns []*types.Transaction) error {
+func (c *ethereumCrawler) saveData(ctx context.Context, blockNumber uint64, txns []types.Transaction) error {
 	err := c.repo.SaveTransactions(ctx, blockNumber, txns)
 	if err != nil {
 		log.Printf("error saving %d transactions", len(txns))

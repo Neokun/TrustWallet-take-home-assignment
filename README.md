@@ -10,7 +10,7 @@ For the sake of simplicity, here are assumptions based on the requirements of th
 * `GetTransactions` return transactions of the latest parsed block, no pagination.
     * Only store the latest block's transaction data for each address. No historical data is saved.
     * If the latest parsed block does not have transactions for the subscribed address -> return empty list.
-* Crawl latest block on Ethereum Blockchain, meaning the block time is 12s (approximately) -> let the job run interval every 4s.
+* On Ethereum Blockchain the block time is 12s (approximately), meaning when crawl latest block on the chain, we can let the job run interval every 4s.
 * Avoid usage of external libraries: gin-gonic/gin, go-ethereum, etc.
     * Use Go's `net/http` package to make requests to the Ethereum JSONRPC API.
     * Use Go's built-in data structures to store in memory data.
@@ -73,4 +73,22 @@ When run main, the code will start both the crawler job and the APIs server
 
 ```bash
 go run cmd/tx-parser/main.go
+```
+
+Example of the 3 APIs:
+* GET /current-block
+```bash
+curl --location 'http://localhost:8080/current-block'
+```
+* POST /subscribe
+```bash
+curl --location 'http://localhost:8080/subscribe' \
+--header 'Content-Type: application/json' \
+--data '{
+    "address": "0xf15689636571dba322b48e9ec9ba6cfb3df818e1"
+}'
+```
+* GET /transactions
+```bash
+curl --location 'http://localhost:8080/transactions?address=0x95222290dd7278aa3ddd389cc1e1d165cc4bafe5'
 ```

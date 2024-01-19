@@ -66,24 +66,28 @@ func Test_extractTransactions(t *testing.T) {
 				BlockNumber: utils.HexUint64(14),
 				From:        "0x123",
 				To:          "0x321",
+				Hash:        "hash1",
 				Timestamp:   utils.HexUint64(time.Now().Unix()),
 			},
 			{
 				BlockNumber: utils.HexUint64(14),
 				From:        "TEST1",
 				To:          "test1",
+				Hash:        "hash2",
 				Timestamp:   utils.HexUint64(time.Now().Unix()),
 			},
 			{
 				BlockNumber: utils.HexUint64(14),
 				From:        "TEST2",
 				To:          "test1",
+				Hash:        "hash3",
 				Timestamp:   utils.HexUint64(time.Now().Unix()),
 			},
 			{
 				BlockNumber: utils.HexUint64(14),
 				From:        "TEst1",
 				To:          "test2",
+				Hash:        "hash4",
 				Timestamp:   utils.HexUint64(time.Now().Unix()),
 			},
 		},
@@ -98,10 +102,9 @@ func Test_extractTransactions(t *testing.T) {
 	txns, err := crawler.extractTransactions(ctx, &fakeBlock)
 	assert.NoError(t, err)
 	assert.Len(t, txns, 3)
-
-	for _, tx := range txns {
-		assert.NotEqual(t, "0x123", tx.From)
-	}
+	assert.Equal(t, "hash2", txns[0].Hash)
+	assert.Equal(t, "hash3", txns[1].Hash)
+	assert.Equal(t, "hash4", txns[2].Hash)
 }
 
 func TestEthereumCrawler_Run(t *testing.T) {

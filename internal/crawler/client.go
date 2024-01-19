@@ -32,7 +32,7 @@ func (c *ethereumClient) BlockNumber(ctx context.Context) (uint64, error) {
 		"jsonrpc": "2.0",
 		"method":  blockNumberMethod,
 		"params":  []string{},
-		"id":      83,
+		"id":      83, // can be any ID, not matter now
 	})
 
 	if err != nil {
@@ -48,7 +48,7 @@ func (c *ethereumClient) GetBlockByNumber(ctx context.Context, blockNumber uint6
 		"jsonrpc": "2.0",
 		"method":  getBlockByNumberMethod,
 		"params":  []interface{}{number, true},
-		"id":      1,
+		"id":      1, // can be any ID, not matter now
 	})
 	if err != nil {
 		return nil, err

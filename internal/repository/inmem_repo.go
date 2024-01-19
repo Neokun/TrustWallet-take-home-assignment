@@ -9,7 +9,7 @@ import (
 	"github.com/TrustWallet/tx-parser/internal/types"
 )
 
-type addressTransactionsDict map[string][]*types.Transaction
+type addressTransactionsDict map[string][]types.Transaction
 
 type inMemRepo struct {
 	mu              sync.RWMutex
@@ -55,7 +55,7 @@ func (r *inMemRepo) GetTransactions(ctx context.Context, address string) ([]type
 	if txns, ok := r.txnDict[address]; ok {
 		transactions := make([]types.Transaction, len(txns))
 		for i, tx := range txns {
-			transactions[i] = *tx
+			transactions[i] = tx
 		}
 
 		return transactions, nil
@@ -74,19 +74,19 @@ func (r *inMemRepo) AddAddress(ctx context.Context, address string) error {
 		return fmt.Errorf("address already exists")
 	}
 
-	r.txnDict[address] = []*types.Transaction{}
+	r.txnDict[address] = []types.Transaction{}
 	return nil
 }
 
 // SaveTransactions save the list of transactions
-func (r *inMemRepo) SaveTransactions(ctx context.Context, blockNumber uint64, txns []*types.Transaction) error {
+func (r *inMemRepo) SaveTransactions(ctx context.Context, blockNumber uint64, txns []types.Transaction) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	r.currentBlockNum = blockNumber
 	newTxnDict := make(addressTransactionsDict)
 	for address := range r.txnDict {
-		newTxnDict[address] = []*types.Transaction{}
+		newTxnDict[address] = []types.Transaction{}
 	}
 
 	for _, tx := range txns {
